@@ -11,7 +11,7 @@ import {
 import stylesUrl from "~/styles/login.css";
 import { db } from "~/utils/db.server";
 import { badRequest } from "~/utils/request.server";
-import { login } from "~/utils/session.server";
+import { login, createUserSession, } from "~/utils/session.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesUrl },
@@ -82,11 +82,12 @@ export const action = async ({ request }: ActionArgs) => {
           formError: `Username/Password combination is incorrect`,
         });
       }
-      return badRequest({
-        fieldErrors: null,
-        fields,
-        formError: "Not implemented",
-      });
+      // return badRequest({
+      //   fieldErrors: null,
+      //   fields,
+      //   formError: "Not implemented",
+      // });
+      return createUserSession(user.id, redirectTo);
     }
     case "register": {
       const userExists = await db.user.findFirst({

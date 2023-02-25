@@ -1,6 +1,7 @@
 import type { LoaderArgs, ActionArgs, MetaFunction, } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, useLoaderData, useParams, useCatch, } from "@remix-run/react";
+import { Link, useLoaderData, useParams, useCatch, Form, } from "@remix-run/react";
+import { JokeDisplay } from "~/components/joke";
 
 import { db } from "~/utils/db.server";
 import { requireUserId, getUserId, } from "~/utils/session.server";
@@ -69,23 +70,7 @@ export default function JokeRoute() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <p>Here's your hilarious joke:</p>
-      <p>{data.joke.content}</p>
-      <Link to=".">{data.joke.name} Permalink</Link>
-      {data.isOwner ? (
-        <form method="post">
-          <button
-            className="button"
-            name="intent"
-            type="submit"
-            value="delete"
-          >
-            Delete
-          </button>
-        </form>
-      ) : null}
-    </div>
+    <JokeDisplay isOwner={data.isOwner} joke={data.joke} />
   );
 }
 
